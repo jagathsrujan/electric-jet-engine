@@ -1,0 +1,26 @@
+.DS_Store
+Thumbs.db
+*.FCBak
+~$*
+*.tmp
+*.bak
+*.lck
+# ANSYS solver output (keep setup + summarised results)
+sim/**/*_files/dp*/**/*.rst
+sim/**/*.rst
+sim/**/*.rth
+sim/**/*.cas.h5
+sim/**/*.dat.h5
+sim/**/*.cas.gz
+sim/**/*.dat.gz
+sim/**/*.res
+sim/**/*.db
+# MATLAB
+*.asv
+slprj/
+# KiCad
+*-backups/
+fp-info-cache
+*.kicad_prl
+# local Claude settings
+.claude/settings.local.json

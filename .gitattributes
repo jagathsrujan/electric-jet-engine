@@ -1,0 +1,11 @@
+* text=auto
+*.md text eol=lf
+*.SLDPRT binary
+*.SLDASM binary
+*.SLDDRW binary
+*.FCStd binary
+*.step binary
+*.stp binary
+*.stl binary
+*.wbpj binary
+*.mat binary
