@@ -32,4 +32,5 @@ Guide rail, load cell, data logging; final cold and fired thrust runs.
 - [x] Video analysed (`video-notes-starstreak-mk1.md`)
 - [x] Scope agreed
 - [x] Phase 1 steps 1-3: centrifugal chosen and sized (`docs/parameters.md`)
-- [ ] Phase 1 step 4: motor, ESC and supply
+- [x] Phase 1 step 4: drive chosen: DYS D3536-5 1450 KV, Skywalker 40A V2, 12 V 30 A supply at 13-14 V (`docs/motor-selection.md`); parts not yet bought
+- [ ] Phase 1 step 5: impeller and volute CAD (Windows), compressor controller (Mac), print and bench-test v1
