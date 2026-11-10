@@ -4,6 +4,16 @@ Newest entry first. Each entry: date, machine, what was done, files changed, wha
 
 ---
 
+## 2026-11-10 · Mac · motor research and second reference video
+
+**Done:** Researched drive parts (Sonnet subagent, web prices checked 2026-11-10; nothing bought or bench-tested; the user has not confirmed the pick yet). Proposed: DYS D3536-5 1450 KV outrunner (5 mm shaft), Hobbywing Skywalker 40A V2 ESC, 12 V 30 A adjustable supply trimmed to about 13-14 V. Also added notes on a second reference build (the "Pyroflask"), which shows a combustion liner hole pattern and fuel control useful for Phase 2.
+
+**Files:** `docs/motor-selection.md`, `docs/video-notes-hybrid-jet.md`
+
+**Needed from Windows:** For the impeller draft, treat these as provisional parameters until the motor is in hand and measured: shaft 5 mm, motor body 35 mm diameter, mounting pattern 16 x 19 mm with 4 x M3 *(interp., taken from a different seller's D3536 page)*. Shaft protrusion and prop-adapter dimensions are unknown; keep them as parameters. Earlier requests still stand.
+
+---
+
 ## 2026-11-10 · Mac · compressor sizing
 
 **Done:** User chose a single-stage centrifugal blower, backward-curved, direct brushless drive. Preliminary 1D mean-line sizing written (Sonnet subagent; arithmetic spot-checked, nothing tested or simulated). Headline: 30 g/s, 1.5 kPa, D2 100 mm, 9 blades at 45 deg, 11,700 rpm design, 15,000 rpm max, about 70 W shaft at design.
