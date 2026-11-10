@@ -31,4 +31,5 @@ Guide rail, load cell, data logging; final cold and fired thrust runs.
 ## Status
 - [x] Video analysed (`video-notes-starstreak-mk1.md`)
 - [x] Scope agreed
-- [ ] Phase 1 step 1-2 in progress
+- [x] Phase 1 steps 1-3: centrifugal chosen and sized (`docs/parameters.md`)
+- [ ] Phase 1 step 4: motor, ESC and supply

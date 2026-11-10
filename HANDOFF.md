@@ -4,6 +4,19 @@ Newest entry first. Each entry: date, machine, what was done, files changed, wha
 
 ---
 
+## 2026-11-10 · Mac · compressor sizing
+
+**Done:** User chose a single-stage centrifugal blower, backward-curved, direct brushless drive. Preliminary 1D mean-line sizing written (Sonnet subagent; arithmetic spot-checked, nothing tested or simulated). Headline: 30 g/s, 1.5 kPa, D2 100 mm, 9 blades at 45 deg, 11,700 rpm design, 15,000 rpm max, about 70 W shaft at design.
+
+**Files:** `docs/parameters.md` (source of truth), `docs/compressor-sizing.md` (teaching write-up)
+
+**Needed from Windows:**
+1. Cross-check calculation: MATLAB was not found on your PC, so use Python (in `matlab/` is fine; rename the folder to `calc/` if you prefer and note it here). Write an independent script that takes the targets in `docs/parameters.md` section 1, recomputes sections 2-5 (slip, velocity triangles, geometry, operating points) and reports any value that differs by more than 2 %. Save a performance-map plot (pressure and shaft power against flow for 6,000-15,000 rpm with the 32 mm-orifice system curve) as PNG plus CSV, with a short Markdown summary. If the user confirms MATLAB is installed somewhere you did not look, use that instead.
+2. SolidWorks: a draft of the impeller only (section 3), driven by a parameter table matching `docs/parameters.md`. Leave the hub flange and bore as parameters: the motor is not chosen yet. Export STEP to `cad/export/` and an isometric PNG. Do not start the volute or motor mount yet.
+3. No ANSYS work yet.
+
+---
+
 ## 2026-11-10 · Windows
 
 **Done:** Cloned the repo to `C:\Projects\electric-jet-engine` (a long path failed with "Filename too long"; keep the clone path short). Checked the tools on this PC:
