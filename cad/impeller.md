@@ -1,94 +1,125 @@
-# Impeller draft (CAD v0)
+# Impeller draft 2 (CAD v1)
 
-Windows, SolidWorks 2026, 2026-11-10. Open centrifugal impeller with back plate, hub and bore. No volute, no motor mount. Draft only: not simulated, not printed, not checked against the motor.
+Windows, SolidWorks 2026, 2026-11-10. Rebuilt from scratch per the Mac review in `HANDOFF.md` ("Mac · review of cross-check and impeller draft"). Open centrifugal impeller: back plate, hub, bore, 9 prismatic single-arc blades. No volute, no motor mount (they wait for the measured motor). Not simulated, not printed.
 
-Files: `cad/impeller.SLDPRT` (native), `cad/export/impeller.step`, `cad/export/impeller.stl`, `cad/export/impeller_iso.png`, `cad/export/impeller_top.png`.
+Files:
+- `cad/impeller.SLDPRT` (native, overwrites draft 1)
+- `cad/export/impeller.step`, `impeller.stl` (same model frame, see checks)
+- `cad/export/impeller_iso.png`, `impeller_top.png`, `impeller_back.png` (SolidWorks screen captures, shaded with edges, sketches/axes/planes/origin hidden; only cropped afterwards)
+- `cad/scripts/`: the build is a script, so it is reproducible
+  - `blade_geometry.py`: blade arc maths (no SolidWorks)
+  - `build_impeller.py`: builds and saves the part in the running SolidWorks (pywin32)
+  - `export_impeller.py`: STEP, STL, view images
+  - `check_impeller.py`: measures the built model (angles, CoM, volume, taper, fillets, rotation)
+  - `check_parametric.py`: changes Z and bore through the equations, rebuilds, restores
+  - `check_exports.py`: reads STL and STEP bounds in plain Python
 
-## Parameters (source: `docs/parameters.md` section 3 unless stated)
+Run order (interpreter `C:\Users\jagath srujan\mcp-servers\Solidworks-MCP\.venv\Scripts\python.exe`, SolidWorks open): `build_impeller.py`, `export_impeller.py`, `check_impeller.py`, `check_exports.py`.
 
-Global variables with these names exist in the part's equation table. **They are not linked to sketch dimensions** (see "Limitations"), so changing one does not change the geometry yet.
+Why scripts and not the MCP tools: the MCP has no view orientation, equation linking to dimensions, reliable pattern axis, or STL option control (draft 1 problems). The scripts attach to SolidWorks with `win32com.client.GetActiveObject("SldWorks.Application")`; the MCP server code was not changed.
 
-| Variable | Value | Source | Modelled as |
+## Frame and rotation direction
+
+- Axis on Z. Back face of the back plate at Z = 0. Blades point to +Z, the inlet side. Sketch plane for plate, hub and blades: Front plane (XY).
+- **Rotation: counter-clockwise viewed from the inlet side (looking down -Z onto the blades).** Viewed from the motor/back side it is clockwise.
+- Blades curve backward: each blade runs clockwise as it goes outward (leading edge at polar angle 0 deg, r 24; it meets r 50 at -44.1 / -46.8 deg on its two faces, measured). That is backward-curved for counter-clockwise rotation. `impeller_top.png` is the view from the inlet side.
+- Rotation arrow: engraved 0.4 mm into the back face, curved arrow pointing counter-clockwise about +Z (reads clockwise in `impeller_back.png`, which looks from behind). **Three identical arrows at 120 deg** instead of one, so the engraving does not shift the centre of mass (one arrow removes 67.8 mm^3 at r 38 mm, which alone would move the CoM about 0.08 mm, four times the 0.02 mm target).
+- If the motor turns the other way, mirror the part about the Right plane; nothing else changes.
+
+## Parameters (global variables in the part)
+
+Source `docs/parameters.md` section 3 unless stated. "Drives" lists the dimensions linked by equations (`D1@...`).
+
+| Variable | Value | Source | Drives |
 |---|---|---|---|
-| D2 | 100 mm | s3 | Back plate OD; blade tip radius 50 mm |
-| Z | 9 | s3 | 9 blades, 40 deg apart |
-| beta2b | 45 deg | s3 | Exit blade angle from tangent, exact (see below) |
-| t | 1.7 mm | s3 | Constant blade thickness (2 concentric arcs, offset +/- 0.85 mm) |
-| t_LE | 0.8 mm | s3 | **Not modelled** (leading edge is square, 1.7 mm) |
-| d1 | 48 mm | s3 (under review by Mac) | Eye diameter: start radius of the blade-height taper (r = 24 mm) |
-| b1 | 10 mm | s3 (under review) | Blade and hub height above the back plate for r <= 24 mm |
-| b2 | 6.5 mm | s3 | Blade height at r = 50 mm |
-| d_h | 20 mm | s3 | Hub diameter, 10 mm tall boss above the back plate (hub top at z = 13 mm) |
-| d_bore | 5.0 mm | s3 | **PROVISIONAL.** Through bore, drawn at the nominal 5.0 mm (doc says print 4.6 and ream) |
-| t_bp | 3 mm | s3 | Back plate thickness, z = 0 to 3 mm |
-| Hub flange | none | HANDOFF (Mac) | **PROVISIONAL / not modelled.** The hub is a plain 20 mm boss. The motor bolt circle (16 x 19 mm, 4 x M3 *(interp.)*) is not in the model yet |
-| beta1_LE | 42 deg | s3 beta1m | Blade inlet angle used to define the arc (see below). Parameter for the hub-angle review |
-| r1_LE | 18.4 mm | s3 (rms radius) | Blade leading-edge radius |
-| R_blade | 49.8453 mm | computed | Blade centreline arc radius |
+| D2 | 100 mm | s3 | back plate diameter (`D1@SK_BackPlate`) |
+| t_bp | 3 mm | s3 *(interp.)* | back plate thickness (`D1@BackPlate`); hub and blade extrude depth = t_bp + b1 |
+| b1 | 10 mm | s3 | hub and blade height above the plate (`D1@Hub`, `D1@Blade`) |
+| d_h | 20 mm | s3 *(interp.)* | hub diameter (`D1@SK_Hub`) |
+| d_bore | 5.0 mm | s3, **provisional** (print 4.6, ream 5.0 *(interp.)*) | bore in plate and hub sketches (`D2@SK_BackPlate`, `D2@SK_Hub`) |
+| Z | 9 | s3 | blade pattern count (`D1@BladePattern`) |
+| r_fil | 1 mm | HANDOFF item 3 | root fillet (`D1@RootFillet`) |
+| arrow_depth | 0.4 mm | HANDOFF item 5 | arrow engraving depth (`D1@RotationArrow`) |
+| b2 | 6.5 mm | s3 | stored only: height taper sketch (coordinate table) |
+| r1 | 24 mm | s3 | stored only: blade sketch (coordinate table) |
+| beta1b | 35 deg | s3 *(interp.: 32 deg flow + 3 incidence)* | stored only |
+| beta2b | 45 deg | s3 | stored only |
+| Rb | 61.3 mm | s3 | stored only |
+| t | 1.7 mm | s3 *(interp.)* | stored only |
+| t_LE | 0.8 mm | s3 *(interp.)* | stored only |
+| L_taper | 8 mm | s3 *(interp.)* | stored only |
 
-## Modelling method
+**Parametric, partly.** Plate, hub, bore, heights, blade count, fillet and arrow depth follow the equations; `check_parametric.py` set Z = 7 and d_bore = 6, rebuilt (volume 30,888 to 29,744 mm^3, CoM still on axis at 3.7e-8 mm) and restored. **The blade outline and the height-taper profile are not linked**: they were drawn from coordinates computed in `blade_geometry.py`. To change r1, the angles, Rb, t, t_LE or b2, edit `blade_geometry.py` (`P`) and rerun `build_impeller.py`; the coordinate table below is what it drew for the current values.
 
-Axis is Z. Back plate on the Front plane (z 0 to 3), hub boss (z 3 to 13), blades, then a taper cut.
+## Method (feature tree)
 
-1. **Back plate:** circle 100 mm, bore 5 mm, extruded 3 mm.
-2. **Hub:** annulus 20 / 5 mm, extruded 10 mm from the plate top.
-3. **Blades:** one sketch on the plate top holding all 9 blade outlines, one extrude of 10 mm. Each outline is two concentric arcs (R +/- 0.85 mm) closed by a straight leading edge and a straight chord at r = 50 mm. Blade centreline arc: centre at (-18.642, -33.353) mm, radius R = 49.845 mm, leading edge at (18.4, 0), trailing edge at 51.9 deg clockwise (viewed from +Z) at r = 50. Clockwise outward means backward curved for counter-clockwise rotation viewed from the blade side (+Z). Rotation sense is *(interp.)*; mirror the model if the motor turns the other way.
-4. **Height taper:** revolve cut (Top plane sketch) of the region above a straight line from (r 24, z 13) to (r 50, z 9.5), which gives blade height 10 mm at the eye falling linearly to 6.5 mm at the tip. Hub is unaffected (r < 24).
+1. `SK_BackPlate` / `BackPlate`: circle D2 and bore circle on Front plane, extruded t_bp (Z 0 to 3).
+2. `SK_Hub` / `Hub`: annulus d_h / d_bore, extruded 13 mm from Z = 0 (top at Z 13).
+3. `SK_Blade` / `Blade`: one blade outline on Front plane, extruded 13 mm from Z = 0 (merges with the plate). Outline: 0.8 mm leading-edge line at r1, two straight taper flanks to the full 1.7 mm thickness 8 mm along the centreline, two arcs concentric with the centreline arc (R 61.3 +/- 0.85 mm), closed by an arc on the D2 circle.
+4. `RootFillet`: 1 mm fillet on all 5 root edges of the seed blade (two side arcs, two taper flanks, leading edge).
+5. `Axis_Z`: reference axis at the intersection of the Top and Right planes (= model Z axis).
+6. `BladePattern`: circular pattern of `Blade` + `RootFillet` about `Axis_Z`, 9 equal instances over 360 deg.
+7. `SK_HeightTaper` / `HeightTaper`: revolve cut about Z removing everything above the line (r 24, Z 13) to (r 50, Z 9.5), i.e. blade height 10 mm at r1 falling linearly to 6.5 mm at D2 *(interp.: linear in r; the doc gives only end values)*.
+8. `SK_Arrow` / `RotationArrow` and `ArrowPattern`: arrow cut 0.4 mm into the back face from Z = 0, patterned 3 times about `Axis_Z`.
 
-Blade centreline angles measured from the tangent (computed from the arc geometry, `cos(beta) = (r^2 + R^2 - c^2) / (2 R r)`, c = distance from origin to arc centre; not measured back from the SolidWorks model):
+Sketches and the axis are hidden in the saved part.
 
-| Radius | Angle from tangent |
-|---|---|
-| r = 50 mm (exit) | 45.00 deg (matches beta2b) |
-| r = 18.4 mm (leading edge) | 42.00 deg (matches beta1m) |
-| r = 24 mm (eye edge) | 48.0 deg |
+## Coordinate table (blade sketch, Front plane, mm; seed blade; others are rotated by 40 deg steps)
 
-The doc asks for 61 / 42 / 35 deg at hub / rms / shroud, i.e. a blade twisting by 26 deg from hub to shroud. A constant-height extruded 2D arc has one angle per radius, so it can match the doc only at one radius. I chose the rms value (42 deg at 18.4 mm). At the shroud radius (24 mm) this arc is 48 deg, 13 deg steeper than the doc's 35 deg. Hub (r = 10 mm) has no blade in this model because the leading edge starts at 18.4 mm. A true 3D inlet twist is not modelled.
+| Point | X | Y | r |
+|---|---|---|---|
+| Centreline arc centre C | -26.2140 | -35.1602 | 43.8568 |
+| Centreline at leading edge | 24.0000 | 0.0000 | 24.0000 |
+| LE corner, outer side (R + 0.4) | 24.3277 | 0.2294 | 24.3287 |
+| LE corner, inner side (R - 0.4) | 23.6723 | -0.2294 | 23.6735 |
+| Taper end, outer side (R + 0.85) | 28.9024 | -6.4408 | 29.6114 |
+| Taper end, inner side (R - 0.85) | 27.3948 | -7.2264 | 28.3319 |
+| Exit, outer side (on D2) | 35.9347 | -34.7663 | 50.0000 |
+| Exit, inner side (on D2) | 34.2221 | -36.4533 | 50.0000 |
+| Centreline at exit | 35.0842 | -35.6244 | 50.0000 |
 
-## Approximations and deviations from the doc
+Side arcs: centre C, radii 62.15 and 60.45 mm, drawn clockwise from taper end to exit. Taper end lies 8 mm of arc (0.1305 rad about C) from the leading edge. The centre is found from: centreline through (r1, 0) at beta1b from the backward tangent, radius Rb (`blade_geometry.centre`).
 
-- Blade is a pure 2D extrusion (no inlet twist, no leading-edge taper, no fillets).
-- Blade height taper is linear in radius, starting at the eye radius; the doc gives only the two end values.
-- Blades start at r = 18.4 mm, not at the hub (r = 10 mm), so the region r = 10 to 18.4 mm is an open flat plate.
-- Not patterned by the circular-pattern tool: see "Limitations".
-- No tip clearance (eps = 0.5 mm) applies yet: that belongs to the volute fit.
-- No balance features.
+Height-taper profile (Top plane, r, Z): (20, 13), (24, 13), (50, 9.5), (55, 9.5), (55, 23), (20, 23), revolved 360 deg about Z.
+
+Arrow (Front plane, polar, mm/deg): shaft annulus r 36 to 40 from 200 to 245 deg; head base r 33.5 to 42.5 at 245 deg; tip r 38 at 262 deg. Copies at +120 and +240 deg.
+
+## Checks (measured from the built model by `check_impeller.py` / `check_exports.py`)
+
+| Check | Target | Measured | Note |
+|---|---|---|---|
+| Blade inlet angle at r 24 | 35 deg | 34.999 to 35.002 deg (all 9 blades) | From the side-face cylinders of each blade: centre and radius read from the model, angle = acos((r^2 + R^2 - c^2) / (2 r R)) |
+| Blade exit angle at r 50 | 45 deg | 45.003 to 45.004 deg (all 9) | 0.004 deg over because Rb is rounded to 61.3 mm |
+| Centreline arc radius | 61.3 mm | 61.300 mm (side faces 60.450 / 62.150) | |
+| Blade thickness | 1.7 mm | 1.700 mm | |
+| Centre-of-mass radial offset | < 0.02 mm | **2.3e-8 mm** (x 2.1e-8, y 8.4e-9); CoM Z = 2.961 mm | draft 1 was 0.12 mm |
+| Volume | | 30,888.2 mm^3 | |
+| Mass at PLA 1,250 kg/m^3 *(interp.)* | doc about 50 g | **38.6 g** | volume x density; the part has no material assigned (no PLA in the SolidWorks library) |
+| Izz at PLA *(interp. density)* | doc 5.5e-5 kg m^2 | 4.47e-5 kg m^2 | from SolidWorks inertia scaled to 1,250 kg/m^3 |
+| Leading-edge width | 0.8 mm | 0.800 mm (distance between the LE corner edges) | |
+| Taper length | 8 mm | 8.000 mm of arc (chord 7.994 mm); thickness at taper end 1.700 mm | |
+| Root fillets | 1 mm, every root | 27 R1 cylinder faces (LE + 2 flanks per blade) + 18 tori (2 side arcs per blade) = all 5 root edges on all 9 blades; corner edges start at Z 4.0 = plate top + 1 mm | **Not stopped short anywhere**, including the 0.8 mm tapered tip |
+| Rotation | CCW from inlet, backward blades | LE at 0 deg, blade reaches r 50 at -44.1 / -46.8 deg (clockwise) | backward-curved for CCW |
+| Arrow | 0.4 mm deep on back face | 67.8 mm^3 per arrow removed, 3 arrows | visible in `impeller_back.png` |
+| Model bounding box | | X -50..50, Y -50..50, Z 0..13 mm | |
+| STL bounds (binary, mm, 6,382 triangles) | axis on Z, back face Z 0 | X -50.000..50.000, Y -49.981..49.936, Z 0.000..13.000; volume 30,840 mm^3 (-0.16 %, tessellation) | "do not translate to positive space" set |
+| STEP bounds (AP214, mm) | same frame | points X -50.000..50.000, Y -49.981..48.833, Z 0.000..13.000 | Y max below 50 because the rim is stored as a circle, not points |
+| Parametric test | | Z 7, bore 6: rebuilds, CoM 3.7e-8 mm; restored to 30,888.2 mm^3 | |
+
+Blade heights: 10 mm at the leading edge (inner LE corner Z 3 to 13), 9.956 mm at the outer LE corner (the cone starts at r 24 exactly), 6.5 mm at r 50.
 
 ## Printability (back plate down, blades up)
 
-- Minimum thicknesses in the model: blade 1.7 mm (about 4 perimeters at 0.42 mm), back plate 3 mm, hub wall 7.5 mm, trailing-edge chord about 2.4 mm.
-- Gap between neighbouring blades at the tip is 2 pi 50 / 9 = 34.9 mm; the minimum passage near the leading edge is about 11 mm. No overhangs, no supports. The bore is vertical; print at 4.6 mm and ream *(interp., from doc)*.
-- The model is a single solid; blade-to-plate joints have no fillets. Adding a 0.5 to 1 mm fillet at the blade roots is advisable (not done).
+- Blades stand straight up; no overhangs except the 0.4 mm arrow engraving on the bed face (a short bridge over 4 mm, fine on most printers *(interp.)*).
+- Minimum features: leading edge 0.8 mm (about 2 lines at 0.42 mm *(interp.)*), blade 1.7 mm, plate 3 mm, hub wall 7.5 mm.
+- Root fillets 1 mm to strengthen the blade-to-plate joint across layers.
 
-## Mass (assumed PLA *(interp.)*)
+## Not verified
 
-SolidWorks has no PLA entry in its material library (3 matches only for "PLA": plain carbon steel, 7075 and plasticized PVC, all irrelevant), so no material was assigned (SolidWorks reports 1000 kg/m^3 by default).
-
-| Quantity | Value |
-|---|---|
-| Volume (`sw_get_mass_properties`) | 32,024 mm^3 (32.02 cm^3) |
-| Mass at PLA 1,250 kg/m^3 (`parameters.md` s6) | **40.0 g** (hand-multiplied from the volume) |
-| Doc estimate | about 50 g, mostly solid, so the CAD is 20 % lighter |
-| Mass at default 1,000 kg/m^3 | 32.0 g |
-| Moment of inertia Izz at 1,000 kg/m^3 | 3.634e-5 kg m^2, so about 4.5e-5 at PLA (doc: 5.5e-5) |
-| Centre of mass offset from axis | about 0.12 mm (x -0.112, y 0.048) |
-
-STL cross-check: the exported STL volume is 31,990 mm^3, within 0.1 % of the model.
-
-## Not verified / known issues
-
-- **Static imbalance in the CAD:** a symmetric 9-blade part should have its centre of mass on the axis, but the model's is 0.12 mm off. That is about 4.8 g mm at 40 g against the 1 g mm target. The first blade (extruded alone before the other eight were added to the sketch) added 669 mm^3 in an earlier test build, while the average over all nine in this build is 706 mm^3, so one blade may differ slightly. The cause was not found; geometry looks uniform in the viewport. Re-check before any print or balance study.
-- The blade angles above are calculated, not measured in SolidWorks.
-- The STL is exported by SolidWorks with the origin shifted into the positive octant (bounding box 0..100 mm in X/Y, 20..33 mm in Z), so it is not centred on the bore axis. Re-centre when importing into a slicer if needed. The STEP is in model coordinates (axis through the origin, back plate bottom at z = 0).
-- Back plate, hub and bore are real geometry, but the bore and any hub flange are provisional until the motor is in hand.
-- Hub inlet angle (61 deg in the doc, under review): not used by the geometry.
-- The 5 mm bore is drawn at nominal size, not the 4.6 mm print size.
-- Nothing about strength, balance, or flow has been checked.
-
-## Limitations of the tooling (what the SolidWorks MCP could not do)
-
-- **Global variables are not linked to sketch dimensions.** The tools draw by coordinates, so the names exist in the equation table but nothing is driven by them. To make the model truly parametric, someone needs to bind dimensions to the variables in the SolidWorks GUI.
-- **Circular pattern failed to give a correct result.** `sw_circular_pattern` picked an axis offset from the true axis (blades landed off-centre, centre of mass 1.2 mm off) or errored, and could not be told to use a pattern spacing without collapsing the total angle. Instead all 9 blade outlines were computed (rotated copies of one blade at 40 deg steps) and drawn in one sketch. There is no pattern feature in the tree.
-- **No isometric capture:** `sw_capture_viewport` captures the current view only, and there is no tool to change it (the model was in the top view). `impeller_top.png` is the SolidWorks capture (top view); `impeller_iso.png` is rendered from the exported STL with matplotlib (not SolidWorks).
-- No PLA material in the SolidWorks library.
-- A first revolve cut sketched with y > 0 on the Top plane failed because Top plane sketch y maps to -Z; it was redone with y < 0. An unused sketch remains in the tree.
+- Nothing simulated, printed or balanced. The CoM check is ideal CAD geometry; print imbalance will be far larger and still needs the 1 g mm static balance.
+- Mass and inertia depend on the PLA density *(interp.)* and assume 100 % infill.
+- Bore and any hub flange are provisional until the motor is in hand; no flange is modelled.
+- Blade outline and taper profile are not equation-driven (see Parameters).
+- The STL is a fine-quality tessellation; slicer import was not tried.
+- Images are SolidWorks graphics-area captures (`SaveBMP`), cropped with Pillow; the "iso" image is the `*Front` view tilted 55 deg so the axis stands up, because SolidWorks' `*Isometric` assumes Y up and shows this part on its side.
+- The export script turns off the display of planes, axes, origins and sketches in this part's options and switches the view to shaded-with-edges; it also sets application STL export options (binary, mm, fine, no positive translation), which stay set in SolidWorks.

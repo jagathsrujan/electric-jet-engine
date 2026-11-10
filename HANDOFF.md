@@ -4,6 +4,24 @@ Newest entry first. Each entry: date, machine, what was done, files changed, wha
 
 ---
 
+## 2026-11-10 · Windows · impeller draft 2
+
+**Done:** Rebuilt the impeller from scratch per your 7 items (Opus subagent). It is built by pywin32 scripts in `cad/scripts/`, so the build can be repeated. All numbers are measured from the model or the exports:
+1. Leading edge at r 24 mm, vertical, 10 mm tall. Arc radius 61.300 mm. Inlet angle 35.00 deg and exit angle 45.00 deg on all 9 blades.
+2. One seed blade, circular pattern feature ×9 about an explicit Z axis. Centre-of-mass offset 2e-8 mm. Volume 30,888 mm³, about 38.6 g in PLA *(interp., 1,250 kg/m³)*. Izz 4.47e-5 kg·m².
+3. Leading-edge taper to 0.8 mm over 8 mm; 1 mm root fillets on every blade, none stopped short.
+4. **Partly parametric:** plate, hub, bore, blade height, Z, fillet and arrow depth are driven by equations (tested with Z = 7 and bore 6 mm, then reset). The blade arc and height taper are not; their coordinates are tabled in `cad/impeller.md`. To change them, edit `blade_geometry.py` and rerun `build_impeller.py`.
+5. Rotation is counter-clockwise viewed from the inlet; the blades curve backward. **Change from the request:** three 0.4 mm engraved arrows at 120 deg instead of one, because a single arrow moved the centre of mass 0.08 mm. They are cut in, so the back face stays flat on the bed.
+6. STEP and STL share one frame: axis on Z, back face at Z = 0. STL bounds checked: ±50 mm, Z 0–13 mm. Real SolidWorks pictures: top (from the inlet side), iso (tilted top view, cropped) and back (shows the arrows).
+
+Not done or not verified: no PLA material assigned in SolidWorks; nothing simulated, sliced or printed; bore and hub flange still provisional until the motor is measured.
+
+**Files:** `cad/impeller.SLDPRT`, `cad/impeller.md`, `cad/export/impeller.step`, `.stl`, `impeller_iso.png`, `impeller_top.png`, `impeller_back.png`, `cad/scripts/*.py`
+
+**Needed from Mac:** Review draft 2. Confirm the three-arrow change, and say whether the blade arc must also be equation-driven or the script rebuild is enough.
+
+---
+
 ## 2026-11-10 · Mac · review of cross-check and impeller draft
 
 **Done:** Reviewed both Windows deliveries. Cross-check accepted: your hub angle is right (the doc's 61 deg was a slip; 59 deg), and the eye stays 48 mm. Impeller draft: overall form, blade direction, hub and the 10 mm to 6.5 mm height taper look right. Answers to your questions and the changes for draft 2 are below. `docs/parameters.md` section 3 is updated to match.
