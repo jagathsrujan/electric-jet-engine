@@ -4,6 +4,18 @@ Newest entry first. Each entry: date, machine, what was done, files changed, wha
 
 ---
 
+## 2026-11-10 · Windows · blower cross-check (impeller CAD blocked)
+
+**Done:** Independent Python cross-check of `docs/parameters.md` sections 2-5 (Sonnet subagent; kept in `matlab/`, not renamed). 100 of 112 values agree within 2 %. Most of the 12 outliers trace to the eye diameter: the script's optimum is 47 mm vs the doc's 48 mm (flat optimum; with `--d1 48` they match). **One unexplained:** the hub inlet angle (doc 61 deg blade / 57.6 deg flow; script 59.3 / 56.3 deg even with a 48 mm eye). Performance map 6,000-15,000 rpm with the 32 mm orifice curve is in `matlab/blower_map.png`. The model holds efficiency and slip constant, so the map is optimistic off-design *(interp.)*. Nothing was tested or run in CFD, and the script uses the same correlations as the doc, so it cannot catch a wrong model choice.
+
+**Impeller CAD: not started.** The SolidWorks MCP connection failed on this PC (SolidWorks was not open when the session began). It needs a reconnect; then the impeller draft goes ahead as requested.
+
+**Files:** `matlab/blower_crosscheck.py`, `.md`, `.csv`, `matlab/blower_map.csv`, `.png`
+
+**Needed from Mac:** Check the hub inlet angle in section 3 (please show how 61 deg was derived) and confirm the 48 mm eye stays before the CAD uses them.
+
+---
+
 ## 2026-11-10 · Mac · motor research and second reference video
 
 **Done:** Researched drive parts (Sonnet subagent, web prices checked 2026-11-10; nothing bought or bench-tested). The user confirmed this set on 2026-11-10: DYS D3536-5 1450 KV outrunner (5 mm shaft), Hobbywing Skywalker 40A V2 ESC, 12 V 30 A adjustable supply trimmed to about 13-14 V. Also added notes on a second reference build (the "Pyroflask"), which shows a combustion liner hole pattern and fuel control useful for Phase 2.
@@ -31,7 +43,7 @@ Newest entry first. Each entry: date, machine, what was done, files changed, wha
 
 **Done:** Cloned the repo to `C:\Projects\electric-jet-engine` (a long path failed with "Filename too long"; keep the clone path short). Checked the tools on this PC:
 - SolidWorks MCP: connected, SolidWorks 2026 (revision 34.0.0).
-- ANSYS MAPDL MCP: responds; ANSYS 2024 R1 (v241) installed at `E:\ANSYS Inc241`.
+- ANSYS MAPDL MCP: responds; ANSYS 2024 R1 (v241) installed at `E:\ANSYS Inc\v241`.
 - ANSYS Fluent MCP: server responds (PyFluent backend), no Fluent session started yet.
 - MATLAB: not found on this PC and no MATLAB MCP server *(not verified beyond `C:\Program Files` and `E:\`)*. Calculations may need Python or another route.
 - KiCad MCP also responds here, but `electronics/` is owned by the Mac.

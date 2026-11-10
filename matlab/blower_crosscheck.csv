@@ -1,0 +1,113 @@
+section,item,this_script,parameters_md,unit,diff_pct,flag_gt_2pct,within_doc_rounding
+2,Overall efficiency,0.535374,0.535,-,0.070,0,1
+2,Slip factor Wiesner,0.819377,0.819,-,0.046,0,1
+2,Slip factor Stodola,0.753173,0.753,-,0.023,0,1
+2,Work coefficient,0.604877,0.605,-,-0.020,0,1
+2,Head coefficient,0.332682,0.333,-,-0.095,0,1
+2,Flow coefficient,0.0407849,0.041,-,-0.525,0,1
+2,Cm2/U2,0.2145,0.215,-,-0.232,0,1
+2,Specific speed,0.922057,0.92,-,0.224,0,1
+2,Specific diameter,3.7606,3.76,-,0.016,0,1
+2,"Tip Mach, 15,000 rpm",0.228979,0.23,-,-0.444,0,1
+3,"Tip speed, design",61.2971,61.3,m/s,-0.005,0,1
+3,Design speed,11706.9,11700,rpm,0.059,0,1
+3,"Tip speed, 15,000 rpm",78.5398,78.5,m/s,0.051,0,1
+3,Number of blades (Pfleiderer raw),9.7128,9.5,-,2.240,1,0
+3,Exit blockage factor,0.931126,0.931,-,0.014,0,1
+3,Exit meridional speed,13.1483,13.1,m/s,0.368,0,1
+3,Exit tangential speed,37.0772,37.1,m/s,-0.061,0,1
+3,Exit absolute speed,39.3395,39.3,m/s,0.101,0,1
+3,c2 flow angle from radial,70.4746,70.5,deg,-0.036,0,1
+3,Exit relative speed,27.5587,27.6,m/s,-0.150,0,1
+3,Actual exit flow angle (tangent),28.4962,28.5,deg,-0.013,0,1
+3,Eye diameter (min W1s),47,48,mm,-2.083,1,0
+3,Eye height b1,9.62234,10,mm,-3.777,1,1
+3,Inlet meridional speed (blocked),19.2865,18.4,m/s,4.818,1,0
+3,Inlet meridional speed (open),17.5959,16.7,m/s,5.365,1,0
+3,"Inlet blade angle, hub",60.5579,61,deg,-0.725,0,1
+3,"Inlet blade angle, rms",44.0606,42,deg,4.906,1,0
+3,"Inlet blade angle, shroud",36.8001,35,deg,5.143,1,0
+3,"Inlet flow angle, hub",57.5579,57.6,deg,-0.073,0,1
+3,"Inlet flow angle, rms",41.0606,39.4,deg,4.215,1,0
+3,"Inlet flow angle, shroud",33.8001,32,deg,5.625,1,0
+3,"Inlet relative speed, shroud",34.6694,34.7,m/s,-0.088,0,1
+3,De Haller W2/W1s,0.794901,0.79,-,0.620,0,1
+4,Volute throat area,1134.11,1134,mm^2,0.010,0,1
+4,Volute mean speed,22.0436,22,m/s,0.198,0,1
+4,Volute dynamic pressure,291.553,292,Pa,-0.153,0,1
+4,q_v / dP_tt,0.194368,0.19,-,2.299,1,1
+4,Base circle radius,55,55,mm,0.000,0,1
+4,Tongue radial clearance,5,5,mm,0.000,0,1
+4,Casing outer diameter,195.808,195,mm,0.414,0,0
+2,"Euler power, design",68.1818,68.2,W,-0.027,0,1
+2,"Disc friction, design",1.86268,1.9,W,-1.964,0,1
+5,"Shaft power, design",70.0445,70,W,0.064,0,1
+5,"dP at 15,000 rpm",2462.58,2463,Pa,-0.017,0,1
+5,"Req. rpm, Stodola slip, eta 0.55",12289.9,12300,rpm,-0.082,0,1
+5,"Req. rpm, Wiesner, eta_tt 0.45",12757.5,12800,rpm,-0.332,0,1
+5,"Req. rpm, Wiesner, eta_tt 0.40",13426.1,13400,rpm,0.195,0,1
+5,"Req. rpm, Stodola, eta_tt 0.40",14081.6,14100,rpm,-0.131,0,1
+4,Volute 45 deg: A,141.764,142,mm^2,-0.166,0,1
+4,Volute 45 deg: h,5.06301,5.1,mm,-0.725,0,1
+4,Volute 45 deg: r_out,60.063,60.1,mm,-0.062,0,1
+4,Volute 90 deg: A,283.529,284,mm^2,-0.166,0,1
+4,Volute 90 deg: h,10.126,10.1,mm,0.258,0,1
+4,Volute 90 deg: r_out,65.126,65.1,mm,0.040,0,1
+4,Volute 135 deg: A,425.293,425,mm^2,0.069,0,1
+4,Volute 135 deg: h,15.189,15.2,mm,-0.072,0,1
+4,Volute 135 deg: r_out,70.189,70.2,mm,-0.016,0,1
+4,Volute 180 deg: A,567.057,567,mm^2,0.010,0,1
+4,Volute 180 deg: h,20.2521,20.2,mm,0.258,0,0
+4,Volute 180 deg: r_out,75.2521,75.2,mm,0.069,0,0
+4,Volute 225 deg: A,708.822,709,mm^2,-0.025,0,1
+4,Volute 225 deg: h,25.3151,25.3,mm,0.060,0,1
+4,Volute 225 deg: r_out,80.3151,80.3,mm,0.019,0,1
+4,Volute 270 deg: A,850.586,850,mm^2,0.069,0,0
+4,Volute 270 deg: h,30.3781,30.4,mm,-0.072,0,1
+4,Volute 270 deg: r_out,85.3781,85.4,mm,-0.026,0,1
+4,Volute 315 deg: A,992.351,992,mm^2,0.035,0,1
+4,Volute 315 deg: h,35.4411,35.4,mm,0.116,0,1
+4,Volute 315 deg: r_out,90.4411,90.4,mm,0.045,0,1
+4,Volute 360 deg: A,1134.11,1134,mm^2,0.010,0,1
+4,Volute 360 deg: h,40.5041,40.5,mm,0.010,0,1
+4,Volute 360 deg: r_out,95.5041,95.5,mm,0.004,0,1
+5,6000 rpm: U2 (m/s),31.4159,31.4,,0.051,0,1
+5,6000 rpm: Q (L/s),12.813,12.8,,0.101,0,1
+5,6000 rpm: mdot (g/s),15.3756,15.4,,-0.159,0,1
+5,6000 rpm: dP_tt (Pa),394.013,394,,0.003,0,1
+5,6000 rpm: Shaft power (W),9.46568,9,,5.174,1,1
+5,6000 rpm: Torque (mN m),15.0651,15,,0.434,0,1
+5,6000 rpm: Power eta0.40 (W),12.6212,13,,-2.914,1,1
+5,6000 rpm: Torque eta0.40 (mN m),20.0872,20,,0.436,0,1
+5,9000 rpm: U2 (m/s),47.1239,47.1,,0.051,0,1
+5,9000 rpm: Q (L/s),19.2194,19.2,,0.101,0,1
+5,9000 rpm: mdot (g/s),23.0633,23.1,,-0.159,0,1
+5,9000 rpm: dP_tt (Pa),886.529,887,,-0.053,0,1
+5,9000 rpm: Shaft power (W),31.8713,32,,-0.402,0,1
+5,9000 rpm: Torque (mN m),33.8165,34,,-0.540,0,1
+5,9000 rpm: Power eta0.40 (W),42.5965,43,,-0.938,0,1
+5,9000 rpm: Torque eta0.40 (mN m),45.1963,45,,0.436,0,1
+5,11700 rpm: U2 (m/s),61.2611,61.3,,-0.064,0,1
+5,11700 rpm: Q (L/s),24.9853,25,,-0.059,0,1
+5,11700 rpm: mdot (g/s),29.9823,30,,-0.059,0,1
+5,11700 rpm: dP_tt (Pa),1498.23,1500,,-0.118,0,0
+5,11700 rpm: Shaft power (W),69.9211,70,,-0.113,0,1
+5,11700 rpm: Torque (mN m),57.0681,57,,0.120,0,1
+5,11700 rpm: Power eta0.40 (W),93.5845,94,,-0.442,0,1
+5,11700 rpm: Torque eta0.40 (mN m),76.3817,76,,0.502,0,1
+5,12000 rpm: U2 (m/s),62.8319,62.8,,0.051,0,1
+5,12000 rpm: Q (L/s),25.6259,25.6,,0.101,0,1
+5,12000 rpm: mdot (g/s),30.7511,30.8,,-0.159,0,1
+5,12000 rpm: dP_tt (Pa),1576.05,1576,,0.003,0,1
+5,12000 rpm: Shaft power (W),75.4286,75,,0.571,0,1
+5,12000 rpm: Torque (mN m),60.0242,60,,0.040,0,1
+5,12000 rpm: Power eta0.40 (W),100.969,101,,-0.030,0,1
+5,12000 rpm: Torque eta0.40 (mN m),80.349,80,,0.436,0,1
+5,15000 rpm: U2 (m/s),78.5398,78.5,,0.051,0,1
+5,15000 rpm: Q (L/s),32.0324,32,,0.101,0,1
+5,15000 rpm: mdot (g/s),38.4389,38.4,,0.101,0,1
+5,15000 rpm: dP_tt (Pa),2462.58,2463,,-0.017,0,1
+5,15000 rpm: Shaft power (W),147.151,147,,0.103,0,1
+5,15000 rpm: Torque (mN m),93.6794,94,,-0.341,0,1
+5,15000 rpm: Power eta0.40 (W),197.206,197,,0.105,0,1
+5,15000 rpm: Torque eta0.40 (mN m),125.545,126,,-0.361,0,1
