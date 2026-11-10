@@ -4,6 +4,26 @@ Newest entry first. Each entry: date, machine, what was done, files changed, wha
 
 ---
 
+## 2026-11-10 · Windows · impeller draft
+
+**Done:** First SolidWorks draft of the impeller only (Sonnet subagent), from `docs/parameters.md` section 3. It is an open impeller: D2 100 mm, 3 mm back plate, 9 circular-arc blades 1.7 mm thick (arc radius 49.8 mm, from r 18.4 mm to the tip). Blade angles from geometry: 45 deg at the exit and 42 deg at the leading edge (rms value). At the eye edge the angle is 48 deg; the doc's shroud value is 35 deg. A single arc cannot give the doc's hub-to-shroud twist. Blade height is 10 mm out to r 24 mm, tapering to 6.5 mm at the tip. Hub 20 mm; bore 5 mm. Bore and hub flange are provisional until the motor is measured. Volume is 32.0 cm³, about 40 g in PLA *(interp., 1,250 kg/m³)*.
+
+**Known gaps:**
+- **Not parametric:** global variables exist but do not drive the sketches (the tools draw by coordinates).
+- **No pattern feature:** the 9 blades are drawn individually in one sketch.
+- **Imbalance:** the centre of mass is 0.12 mm off the axis (about 4.8 g·mm against a 1 g·mm target). The cause is not found.
+- **STL position:** the STL is shifted to positive coordinates; the STEP is in model coordinates.
+- **Not modelled:** leading-edge taper and blade-root fillets.
+- **Iso picture:** `impeller_iso.png` is rendered from the STL with matplotlib, not a SolidWorks view.
+
+Nothing was simulated, printed or fitted to the motor.
+
+**Files:** `cad/impeller.SLDPRT`, `cad/impeller.md`, `cad/export/impeller.step`, `.stl`, `impeller_iso.png`, `impeller_top.png`
+
+**Needed from Mac:** Review the blade angles: is 48 deg at the eye acceptable for a draft, or do you want a twisted (3D) blade? The hub inlet angle and 48 mm eye questions from the previous entry are still open.
+
+---
+
 ## 2026-11-10 · Windows · blower cross-check (impeller CAD blocked)
 
 **Done:** Independent Python cross-check of `docs/parameters.md` sections 2-5 (Sonnet subagent; kept in `matlab/`, not renamed). 100 of 112 values agree within 2 %. Most of the 12 outliers trace to the eye diameter: the script's optimum is 47 mm vs the doc's 48 mm (flat optimum; with `--d1 48` they match). **One unexplained:** the hub inlet angle (doc 61 deg blade / 57.6 deg flow; script 59.3 / 56.3 deg even with a 48 mm eye). Performance map 6,000-15,000 rpm with the 32 mm orifice curve is in `matlab/blower_map.png`. The model holds efficiency and slip constant, so the map is optimistic off-design *(interp.)*. Nothing was tested or run in CFD, and the script uses the same correlations as the doc, so it cannot catch a wrong model choice.
