@@ -58,9 +58,11 @@ Conventions: angles are measured from the **tangent** (blade moving direction), 
 | Shaft bore | d_bore | 5.0 | mm | Motor shaft 5 mm. Print 4.6 mm, ream to 5.0 *(interp.)*; fit a metal collet or screw to the motor bell, do not rely on a printed set-screw grip alone |
 | Eye axial-to-radial height | b1 | 10 | mm | Continuity: pi d1 b1 = pi/4 (d1^2 - d_h^2) |
 | Inlet meridional speed | Cm1 | 18.4 | m/s | At the shroud, with leading-edge blockage; 16.7 without |
-| Inlet blade angle, hub (r = 10 mm) | beta1h | 61 | deg | Flow angle 57.6 + 3 deg incidence *(interp.)* |
-| Inlet blade angle, rms radius (18.4 mm) | beta1m | 42 | deg | Flow angle 39.4 + 3 deg |
-| Inlet blade angle, shroud (r = 24 mm) | beta1s | 35 | deg | Flow angle 32.0 + 3 deg |
+| **Blade form (v1, decided 2026-11-10)** | | 2D prismatic, single circular arc | | Blades stand straight up from the back plate so the impeller prints without supports; no hub-to-shroud twist |
+| Blade leading-edge radius | r1 | 24 | mm | At the eye radius, where the flow has turned radial; leading edge is a vertical line, full height b1 |
+| Inlet blade angle at r1 (from tangent) | beta1b | 35 | deg | Flow angle 32.0 + 3 deg incidence *(interp.)* |
+| Blade arc radius | R_b | 61.3 | mm | (r2^2 - r1^2) / (2 (r2 cos beta2b - r1 cos beta1b)); gives 35 deg at r1 and 45 deg at r2 |
+| Reference only: twisted-blade inlet angles | | 59 / 42 / 35 | deg | Hub (r 10) / rms (r 18.4) / shroud (r 24) for a 3D inducer; not used in v1. Hub value corrected from 61 after the Windows cross-check (atan(18.4 / 12.26) + 3) |
 | Inlet relative speed, shroud | W1s | 34.7 | m/s | |
 | De Haller ratio | W2/W1s | 0.79 | - | Limit 0.7 for no blade stall |
 | Back plate thickness | t_bp | 3 | mm | *(interp.)* |

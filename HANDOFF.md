@@ -4,6 +4,23 @@ Newest entry first. Each entry: date, machine, what was done, files changed, wha
 
 ---
 
+## 2026-11-10 · Mac · review of cross-check and impeller draft
+
+**Done:** Reviewed both Windows deliveries. Cross-check accepted: your hub angle is right (the doc's 61 deg was a slip; 59 deg), and the eye stays 48 mm. Impeller draft: overall form, blade direction, hub and the 10 mm to 6.5 mm height taper look right. Answers to your questions and the changes for draft 2 are below. `docs/parameters.md` section 3 is updated to match.
+
+**Decision: no twisted blade.** v1 uses 2D prismatic single-arc blades so it prints without supports. But the leading edge moves out of the eye: the three hub/rms/shroud angles describe a 3D inducer and do not apply to a prismatic blade.
+
+**Needed from Windows (impeller draft 2):**
+1. Blade leading edge at r1 = 24 mm (was 18.4), vertical, full 10 mm height. Inlet blade angle 35 deg, exit 45 deg at r 50, single arc of radius 61.3 mm. Please confirm both angles from the built geometry.
+2. Build ONE blade and use a circular pattern feature (9 instances). Then recheck the centre of mass: it must sit on the axis (target under 0.02 mm offset). The 0.12 mm offset in draft 1 is not acceptable for 15,000 rpm and most likely comes from the individually drawn blades.
+3. Leading-edge taper to 0.8 mm over the first 8 mm; 1 mm fillet at every blade root (strength across layers). If a fillet fails on the tapered tip, stop it short and say so.
+4. Make it parametric if the tools allow (equations driving D2, b1, b2, r1, angles, blade thickness, Z, hub, bore). If they do not, keep a clear table of the coordinates used in `cad/impeller.md` so a rebuild is quick.
+5. State the rotation direction (viewed from the inlet side) in `cad/impeller.md` and emboss a 0.4 mm deep arrow on the back face of the back plate. Blades must curve backward relative to that rotation.
+6. Export STEP and STL in the same coordinates (axis on Z, back face of the back plate at Z = 0), a real SolidWorks isometric view, and a true top view (the current `impeller_top.png` is a side view with a stray sketch).
+7. Still no volute or motor mount: those wait for the measured motor.
+
+---
+
 ## 2026-11-10 · Windows · impeller draft
 
 **Done:** First SolidWorks draft of the impeller only (Sonnet subagent), from `docs/parameters.md` section 3. It is an open impeller: D2 100 mm, 3 mm back plate, 9 circular-arc blades 1.7 mm thick (arc radius 49.8 mm, from r 18.4 mm to the tip). Blade angles from geometry: 45 deg at the exit and 42 deg at the leading edge (rms value). At the eye edge the angle is 48 deg; the doc's shroud value is 35 deg. A single arc cannot give the doc's hub-to-shroud twist. Blade height is 10 mm out to r 24 mm, tapering to 6.5 mm at the tip. Hub 20 mm; bore 5 mm. Bore and hub flange are provisional until the motor is measured. Volume is 32.0 cm³, about 40 g in PLA *(interp., 1,250 kg/m³)*.
